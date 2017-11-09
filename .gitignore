@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#django average
+django_average.egg-info/
+
+
