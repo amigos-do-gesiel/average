@@ -1,0 +1,8 @@
+django==1.11
+django-bootstrap4
+pytest
+pytest-django
+pytest-cov
+factory_boy
+django-polymorphic
+twine
