@@ -1,13 +1,13 @@
+>## Average-framework
 
-=====
-django-average
-=====
+[![Build Status](https://travis-ci.org/amigos-do-gesiel/average.svg?branch=development)](https://travis-ci.org/amigos-do-gesiel/average)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Python version](https://img.shields.io/badge/python-3.5-orange.svg)](https://img.shields.io/badge/python-3.5-orange.svg)
 
 Framework para acompanhamento e visualização de Estatísticas.
 Informações detalhadas na wiki do repositorio.
 
-Quick start
------------
+>### Quick start
 
 1. Adicione django-average ao seu INSTALLED_APPS, exemplo::
 
