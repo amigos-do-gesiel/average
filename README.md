@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Python version](https://img.shields.io/badge/python-3.5-orange.svg)](https://img.shields.io/badge/python-3.5-orange.svg)
 [![Code Health](https://landscape.io/github/amigos-do-gesiel/average/master/landscape.svg?style=flat)](https://landscape.io/github/amigos-do-gesiel/average/master)
+[![Coverage Status](https://coveralls.io/repos/github/amigos-do-gesiel/average/badge.svg?branch=development)](https://coveralls.io/github/amigos-do-gesiel/average?branch=development)
 
 Framework para acompanhamento e visualização de Estatísticas.
 Informações detalhadas na wiki do repositorio.

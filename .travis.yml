@@ -17,4 +17,4 @@ script:
   - docker-compose exec web py.test --cov=.
 
 after_success:
-    - docker-compose exec web coveralls
+  - docker-compose exec web coveralls
