@@ -1,8 +1,11 @@
 django==1.11
 django-bootstrap4
-pytest
-pytest-django
-pytest-cov
 factory_boy
 django-polymorphic
 twine
+pytest-cov==2.5.1
+coverage==4.4.1
+coveralls==1.2.0
+python-coveralls==2.9.1
+pytest-django==3.1.2
+pytest==3.2.3
