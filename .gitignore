@@ -102,5 +102,4 @@ ENV/
 
 #django average
 django_average.egg-info/
-
-
+db.sqlite3
