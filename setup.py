@@ -6,12 +6,22 @@ from setuptools import find_packages, setup
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
 
+version = open('VERSION').read().strip()
+dirname = os.path.dirname(__file__)
+path = os.path.join(dirname, 'src', '__meta__.py')
+meta = '''
+__version__ = '%s'
+__author__ = 'amigos-do-gesiel'
+''' % version
+with open(path, 'w') as F:
+    F.write(meta)
+
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='average',
-    version='0.0.1',
+    version=version,
     #packages=find_packages(exclude=("average",)),
     include_package_data=True,
     license='MIT License',  # example license
@@ -50,9 +60,9 @@ setup(
     },
     
     entry_points = {
-       "console_scripts": ["average = __main__:main"] 
+       "console_scripts": ["average = average.__main__:main"] 
     },
     # Other configurations
-    #zip_safe=False,
-    #platforms='any',
+    zip_safe=False,
+    platforms='any',
 )
