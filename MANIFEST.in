@@ -1,4 +1,3 @@
 include LICENSE
 include README.rst
-recursive-include django_average/static *
-recursive-include django_average/templates *
+include requirements.txt

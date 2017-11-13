@@ -3,18 +3,10 @@ sudo: required
 services:
   - docker
 
-env:
-  - DOCKER_COMPOSE_VERSION=1.14.0
-
-before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-
 script:
-  - docker-compose up -d
-  - docker-compose exec web py.test --cov=.
+  - docker build -t average:latest .
+  - docker run --name average average:latest
+  #- docker exec average py.test --cov=.
 
 after_success:
-  - docker-compose exec web coveralls
+  - docker exec average coveralls
