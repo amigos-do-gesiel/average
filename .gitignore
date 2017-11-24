@@ -24,6 +24,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+db.sqlite3
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -103,6 +104,6 @@ ENV/
 #django average
 django_average.egg-info/
 
-#migrations 
+#migrations
 *\migrations
 !*\migrations\__init__.py
