@@ -103,4 +103,6 @@ ENV/
 #django average
 django_average.egg-info/
 
-
+#migrations 
+*\migrations
+!*\migrations\__init__.py

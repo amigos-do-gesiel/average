@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_average'
+    'django_average',
+    'django_average.statistic_time'
 ]
 
 MIDDLEWARE = [
