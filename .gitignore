@@ -107,3 +107,4 @@ django_average.egg-info/
 #migrations
 *\migrations
 !*\migrations\__init__.py
+*~
