@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from ..observer.models import ObserverStatistic
 import datetime
 
@@ -19,7 +20,7 @@ class StatisticTime(models.Model):
 class StatisticYearly(StatisticTime):
     year_number = models.IntegerField(unique=True) 
     MONTH_TOTAL = models.IntegerField
-    yearly_value = models.FloatField()
+    yearly_value = models.FloatField(default=0.0)
 
     def add_statistic_time(self, monthly_stat):
         monthly_stat.stats_year = self
@@ -34,18 +35,17 @@ class StatisticYearly(StatisticTime):
 
 class StatisticMonthly(StatisticTime):
     # monthly_dontations = models.ForeignKey(StatisticDaily)
-    DAY_TOTAL = models.IntegerField() #number of days this month has
-    monthly_value = models.FloatField()
+    monthly_value = models.FloatField(default=0.0)
     year = models.ForeignKey(StatisticYearly, blank=True, null=True,default=None)
     month = models.IntegerField() 
 
-    def start(self,year):
+    def start(self,search_year):
         if self.year is None:
             try:
-                self.year = StatisticYearly.objects.get(year=year)
+                self.year = StatisticYearly.objects.get(year_number=search_year)
             except ObjectDoesNotExist:
-                self.year = StatisticYearly(year_number = year)
-                self.month.save()
+                self.year = StatisticYearly(year_number = search_year)
+                self.year.save()
 
     def add_statistic_time(self, daily_stat):
         daily_stat.stats_month = self
@@ -70,7 +70,7 @@ class StatisticDaily(StatisticTime, ObserverStatistic):
         if self.month is None:
             try:
                 self.month = StatisticMonthly.objects.get(month=self.donation_date.month,
-                                                              year=StatisticYearly.objects.get(year_value=self.donation_date.year))
+                                                              year=StatisticYearly.objects.get(year_number=self.donation_date.year))
             except ObjectDoesNotExist:
                 self.month = StatisticMonthly(month=self.donation_date.month)
                 self.month.start(self.donation_date.year)
