@@ -2,7 +2,7 @@ from django.db import models
 from ..observer.models import ObserverStatistic
 import datetime
 
-class StatisticTime(ObserverStatistic):
+class StatisticTime(models.Model):
 
     class Meta:
         abstract = True
@@ -17,11 +17,9 @@ class StatisticTime(ObserverStatistic):
         pass
 
 class StatisticYearly(StatisticTime):
+    year_number = models.IntegerField(unique=True) 
     MONTH_TOTAL = models.IntegerField
     yearly_value = models.FloatField()
-
-    def update(self, daily_value):
-        self.statistic_year += daily_value
 
     def add_statistic_time(self, monthly_stat):
         monthly_stat.stats_year = self
@@ -38,10 +36,16 @@ class StatisticMonthly(StatisticTime):
     # monthly_dontations = models.ForeignKey(StatisticDaily)
     DAY_TOTAL = models.IntegerField() #number of days this month has
     monthly_value = models.FloatField()
-    stats_year = models.ForeignKey(StatisticYearly, blank=True, null=True)
+    year = models.ForeignKey(StatisticYearly, blank=True, null=True,default=None)
+    month = models.IntegerField() 
 
-    def update(self, daily_value):
-        self.statistic_month += daily_value
+    def start(self,year):
+        if self.year is None:
+            try:
+                self.year = StatisticYearly.objects.get(year=year)
+            except ObjectDoesNotExist:
+                self.year = StatisticYearly(year_number = year)
+                self.month.save()
 
     def add_statistic_time(self, daily_stat):
         daily_stat.stats_month = self
@@ -54,14 +58,26 @@ class StatisticMonthly(StatisticTime):
     def get_statistic(self):
         return self.monthly_dontations
 
-class StatisticDaily(StatisticTime):
-    daily_donations = models.FloatField()
-    donation_date = models.DateField(auto_now=True)
-    stats_month = models.ForeignKey(StatisticMonthly, blank=True, null=True)
+    def return_days(self):
+       StatisticDaily.objects.filter(month==self) 
 
+class StatisticDaily(StatisticTime, ObserverStatistic):
+    daily_donations = models.FloatField(default = 0.0)
+    donation_date = models.DateField(auto_now=True)
+    month = models.ForeignKey(StatisticMonthly, blank=True, null=True, default = None)
+
+    def start(self):
+        if self.month is None:
+            try:
+                self.month = StatisticMonthly.objects.get(month=self.donation_date.month,
+                                                              year=StatisticYearly.objects.get(year_value=self.donation_date.year))
+            except ObjectDoesNotExist:
+                self.month = StatisticMonthly(month=self.donation_date.month)
+                self.month.start(self.donation_date.year)
+                self.month.save()
+    
     def update(self, donation_value):
         self.daily_donations += donation_value
-
 
     def add_statistic_time(self):
         raise ValueError("You can't add a class to this object")
