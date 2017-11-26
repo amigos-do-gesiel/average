@@ -6,3 +6,4 @@ pytest-cov
 factory_boy
 django-polymorphic
 twine
+dicttoxml

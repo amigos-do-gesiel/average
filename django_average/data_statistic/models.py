@@ -1,13 +1,11 @@
 import json
-import xml
+import dicttoxml
 from django.db import models
-from polymorphic.model import PolymorphicModel
+from polymorphic.models import PolymorphicModel
 from django.core import serializers
 from ..statistic_time.models import StatisticTime
 
 class DataFormatStatistic(PolymorphicModel):
-
-    statistic_time = models.ForeignKey(StatisticTime)
 
     class Meta:
         abstract = True
@@ -19,11 +17,11 @@ class DataFormatStatistic(PolymorphicModel):
 class DataJson(DataFormatStatistic):
 
     def convert_data(self, stats):
-        data = serializers.serialize("json", stats)
+        data = json.dumps(stats)
         return data
 
 class DataXml(DataFormatStatistic):
 
     def convert_data(self, stats):
-        data = serializers.serialize("xml", stats)
+        data = dicttoxml.dicttoxml(stats)
         return data

@@ -24,16 +24,22 @@ class StatisticYearly(StatisticTime):
     year_number = models.IntegerField(unique=True)
     MONTH_TOTAL = models.IntegerField
     yearly_value = models.FloatField(default=0.0)
+    yearly_average = models.FloatField(default=0.0)
 
     def get_statistic(self):
         return self.yearly_value
 
     def update_yearly_value(self, donation_value):
         self.yearly_value += donation_value
-        super(StatisticYearly, self).save()
+        self.update_yearly_average()
+        self.save()
 
     def covert_data(self, data_format_statistic):
-        data_format_statistic.convert_data(self.get_days)
+        year_data = []
+        year_data.append(self)
+        year_data.append(self.get_months())
+        year_data.append(self.get_days())
+        return data_format_statistic.convert_data(year_data)
 
     def get_days(self):
         days = []
@@ -44,21 +50,29 @@ class StatisticYearly(StatisticTime):
                 days.append(day)
         return days
 
+    def get_months(self):
+        return StatisticMonthly.objects.filter(year=self)
+
+    def update_yearly_average(self):
+        months = len(self.get_months())
+        self.yearly_average = self.yearly_value/months
 
 class StatisticMonthly(StatisticTime):
     # monthly_dontations = models.ForeignKey(StatisticDaily)
     monthly_value = models.FloatField(default=0.0)
     year = models.ForeignKey(StatisticYearly, blank=True, null=True,default=None)
     month = models.IntegerField()
+    month_average = models.FloatField(default=0.0)
 
     def start(self,search_year):
         if self.year is None:
             try:
-                self.year = StatisticYearly.objects.get(year_number=search_year)
+                new_year = StatisticYearly.objects.get(year_number=search_year)
+                self.year = new_year
             except ObjectDoesNotExist:
-                self.year = StatisticYearly(year_number = search_year)
-                self.year.save()
-            # suspect code : super(StatisticMonthly, self).save()
+                new_year = StatisticYearly(year_number=search_year)
+                new_year.save()
+                self.year = new_year
             self.save()
 
     def get_statistic(self):
@@ -67,11 +81,29 @@ class StatisticMonthly(StatisticTime):
     def update_monthly_value(self, donation_value):
         self.monthly_value += donation_value
         self.year.update_yearly_value(donation_value)
-        super(StatisticMonthly, self).save()
+        self.update_month_average()
+        self.save()
 
     def get_days(self):
-        return StatisticDaily.objects.filter(month=self.id)
+        days = StatisticDaily.objects.filter(month=self.id)
+        days_list = {}
+        for day in days:
+            days_list[str(day.donation_date.day) + '/' + str(day.donation_date.month) + '/' + str(day.donation_date.year)] = day.daily_donations
+        return days_list
 
+    def get_month_avarege(self):
+        days = len(self.get_days())
+        return self.monthly_value/days
+
+    def convert_data(self, data_format_statistic):
+        data = self.get_days()
+        #data.append(self)
+        #data.append(self.get_days())
+        return data_format_statistic.convert_data(data)
+
+    def update_month_average(self):
+        days = len(self.get_days())
+        self.month_average = self.monthly_value/days
 
 class StatisticDaily(StatisticTime, ObserverStatistic):
     daily_donations = models.FloatField(default = 0.0)
@@ -81,19 +113,22 @@ class StatisticDaily(StatisticTime, ObserverStatistic):
     def start(self):
         if self.month is None:
             try:
-                self.month = StatisticMonthly.objects.get(month=self.donation_date.month,
+                new_month = StatisticMonthly.objects.get(month=self.donation_date.month,
                                                               year=StatisticYearly.objects.get(year_number=self.donation_date.year))
+                self.month = new_month
             except ObjectDoesNotExist:
-                self.month = StatisticMonthly(month=self.donation_date.month)
+                new_month = StatisticMonthly(month=self.donation_date.month)
+                new_month.save()
+                self.month = new_month
                 self.month.start(self.donation_date.year)
-            self.month.save()
+            # self.month.save()
         # suspect code : super(StatisticDaily, self).save()
         self.save()
 
     def update(self, donation_value):
         self.daily_donations += donation_value
         self.month.update_monthly_value(donation_value)
-        super(StatisticDaily, self).save()
+        self.save()
 
 
     def add_statistic_time(self):
@@ -104,3 +139,6 @@ class StatisticDaily(StatisticTime, ObserverStatistic):
 
     def get_statistic(self):
         return self.daily_donations
+
+    def convert_data(self, data_format_statistic):
+        pass

@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_average',
-    'django_average.statistic_time'
+    'django_average.statistic_time',
+    'django_average.data_statistic',
+    'polymorphic'
 ]
 
 MIDDLEWARE = [
