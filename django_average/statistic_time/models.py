@@ -51,7 +51,7 @@ class StatisticYearly(StatisticTime):
         months = StatisticMonthly.objects.filter(year=self)
         months_list = {}
         for month in months:
-            months_list[str(month.month) + '/' + str(month.year.year_number)] = yearly_value
+            months_list[str(month.month) + '/' + str(month.year.year_number)] = self.yearly_value
         return months_list
 
     def update_yearly_average(self):
