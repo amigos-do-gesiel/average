@@ -1,56 +1,29 @@
 import json
 import xml
 from django.db import models
+from polymorphic.model import PolymorphicModel
+from django.core import serializers
+from ..statistic_time.models import StatisticTime
 
-from ..statistic_time.models import StatisticTime 
-
-class DataFormatStatistic(models.Model):
+class DataFormatStatistic(PolymorphicModel):
 
     statistic_time = models.ForeignKey(StatisticTime)
 
     class Meta:
         abstract = True
 
-    def convert_data_statistic(self):
-        raise NotImplementedError("This funtion is not implemented")
-
-    def create_object_data(self):
-        raise NotImplementedError("This funtion is not implemented")
-
-    def aplication_recomendations(self):
-        raise NotImplementedError("This funtion is not implemented")
-
-    def convert_data(self):
-        self.convert_data_statistic()
-        self.create_object_data()
-        self.aplication_recomendations()
+    def convert_data(self, stats):
+        raise NotImplementedError ("You can't convert using this class")
 
 
 class DataJson(DataFormatStatistic):
-    jsonField = models.TextField()
-    
-    class Meta:
-        abstract = True
 
-    def convert_data_statistic(self):
-        pass
-    
-    def create_object_data(self):
-        pass
-
-    def aplication_recomendations(self):
-        pass
+    def convert_data(self, stats):
+        data = serializers.serialize("json", stats)
+        return data
 
 class DataXml(DataFormatStatistic):
 
-    class Meta:
-        abstract = True
-
-    def convert_data_statistic(self):
-        pass
-
-    def create_object_data(self):
-        pass
-
-    def aplication_recomendations(self):
-        pass
+    def convert_data(self, stats):
+        data = serializers.serialize("xml", stats)
+        return data
