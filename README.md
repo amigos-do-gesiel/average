@@ -1,10 +1,10 @@
 >## Average-framework
 
-[![Build Status](https://travis-ci.org/amigos-do-gesiel/average.svg?branch=development)](https://travis-ci.org/amigos-do-gesiel/average)
+[![Build Status](https://travis-ci.org/amigos-do-gesiel/average.svg?branch=master)](https://travis-ci.org/amigos-do-gesiel/average)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Python version](https://img.shields.io/badge/python-3.5-orange.svg)](https://img.shields.io/badge/python-3.5-orange.svg)
 [![Code Health](https://landscape.io/github/amigos-do-gesiel/average/master/landscape.svg?style=flat)](https://landscape.io/github/amigos-do-gesiel/average/master)
-[![Coverage Status](https://coveralls.io/repos/github/amigos-do-gesiel/average/badge.svg?branch=development)](https://coveralls.io/github/amigos-do-gesiel/average?branch=development)
+[![Coverage Status](https://coveralls.io/repos/github/amigos-do-gesiel/average/badge.svg?branch=master)](https://coveralls.io/github/amigos-do-gesiel/average?branch=master)
 
 <p align="justify">Average é um framework de código livre, seu objetivo é oferecer uma maneira simples para se gerar relatórios e gráficos. Teve inicio a partir da necessidade gerenciar doações da ONG providas, para que os administradores observem e policiem as doações recebidas, e façam planejamentos de acordo.</p>
 <p align="justify"> Deve ser utilizado juntamente ao Django.</p>

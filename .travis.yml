@@ -1,0 +1,12 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+  - docker build -t average:latest .
+  - docker run --name average average:latest
+  #- docker exec average py.test --cov=.
+
+after_success:
+  - docker exec average coveralls
