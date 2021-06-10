@@ -1,4 +1,4 @@
-django==1.11.23
+django==2.2.24
 django-bootstrap4
 pytest
 pytest-django
